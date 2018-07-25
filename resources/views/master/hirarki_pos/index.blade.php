@@ -1,0 +1,63 @@
+@extends('master.hirarki_pos.base') 
+
+@section('content_header') 
+	     <h1>
+        List Of Hirarki Pos Limit
+        <small>Daftar Hirarki Pos Limit</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Hirarki Pos Limit</a></li>
+        <li class="active">Master Hirarki Pos Limit</li>
+      </ol>  
+@stop
+
+@section('content')
+<div class="row">
+   <div class="col-xs-12">
+     <div class="box box-danger">
+     	<div class="box-header">
+		     <div class="col-sm-4">
+           <a class="btn btn-primary" href="{{ route('hirarki_pos.create') }}">Add Hirarki Pos Limit</a>
+			 </div>
+		 </div>
+     	<div class="col-xs-10">
+             <div class="box-body">
+            	<table id="hirarki" name = "hirarki" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Position Name</th>
+                      <th>Division Name</th>
+                      <th>Group Limit Id</th>
+                      <th>Description</th>
+                      <!--<th>Action</th>-->
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <?php $i = 0 ?>
+                      @if (isset($GrpAct))
+                        @foreach($GrpAct as $value)
+                        <?php $i++ ?>
+                        <tr>
+                        	<td> {{ $i }} </td>
+                          <td> {{ ($value->position_name) }} </td>
+                          <td> {{ ($value->division_name) }} </td>
+                          <td> {{ ($value->description) }} </td>
+                          <td> {{ ($value->keterangan) }} </td>
+                         <!-- <td><a href="{{ 
+                          route('hirarki_pos.edit',$value->id) }}
+                          " class="btn btn-success btn-sm">Edit</a></td>-->
+                        </tr>
+                        @endforeach
+                      @endif
+                  </tbody>
+                </table>  
+              </div>  
+            </div> 
+     <!--end box danger -->
+     </div>
+   </div>
+</div>
+@stop
+ 

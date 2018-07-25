@@ -1,0 +1,297 @@
+@extends('master.persons.base')
+
+@section('content_header')
+       <h1>
+
+        <small>Form Done</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Person</a></li>
+        <li class="active">index</li>
+      </ol>
+@stop
+
+@section('content')
+<section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+
+
+          <div class="box">
+            <div class="box-header">
+                        @if(session('message'))
+                                  <div class='alert alert-success'>
+                                          {{session('message')}}
+                                  </div>
+                          @endif
+              <h3 class="box-title">Input Form Done</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+
+                <?php
+                // echo "<pre>";
+                //  print_r($Settle);
+                // //print_r($fnd);
+                // echo "</pre>";
+
+
+                $AWAL = $Settle->division_code;
+                // karna array dimulai dari 0 maka kita tambah di awal data kosong
+                // bisa juga mulai dari "1"=>"I"
+                $bulanRomawi = array("", "I","II","III", "IV", "V","VI","VII","VIII","IX","X", "XI","XII");
+                $noUrutAkhir = $Settle->budget_detail_id;
+                $no = 1;
+
+                    // echo "No urut surat di database : 0" ;
+                    // echo "<br>";
+                  //  echo "Pake Format : " . sprintf("%03s", $no). '/' . $AWAL .'/' . $bulanRomawi[date('n')] .'/' . date('Y');
+                    $no_urut = date('Y'). '/' . $bulanRomawi[date('n')] .'/' .$AWAL.'/' . sprintf("%03s", $noUrutAkhir);
+
+
+                    // echo $no_urut;
+                    // die;
+
+                 ?>
+
+
+        <div class="row">
+            <form class="" method="POST" action="{{ route('done_form.update',$Settle->budget_detail_id) }}">
+              {{ csrf_field() }}
+              {{ method_field('PUT') }}
+
+
+           
+           <div class="col-md-6">
+             <div class="form-group">
+               <label>Proposal No</label>
+               <input type="text" value="{{$Settle->eprop_no}}" disabled  class="form-control">
+             </div>
+             <!-- /.form-group -->
+             <div class="form-group">
+               <label>Company</label>
+                   <input type="text"  value="{{$Settle->company_nama}}" disabled  class="form-control">
+             </div>
+             <!-- /.form-group -->
+           </div>
+           <!-- /.col -->
+           <div class="col-md-6">
+             <div class="form-group">
+               <label>Reco No</label>
+                  <input type="text" name="" value="{{$Settle->reco_no}}" disabled class="form-control">
+             </div>
+             <!-- /.form-group -->
+             <div class="form-group">
+               <label>Division</label>
+                 <input type="text" name="" value="{{$Settle->division_name}}" disabled class="form-control">
+             </div>
+             <!-- /.form-group -->
+           </div>
+           <!-- /.col -->
+
+           <div class="col-md-6">
+             <div class="form-group">
+               <label>Region</label>
+                  <input type="text" name="" value="{{$Settle->region}}"  disabled class="form-control">
+             </div>
+             <!-- /.form-group -->
+             <div class="form-group">
+               <label>Brand</label>
+                 <input type="text" name=""  value="{{$Settle->brand_name}}" disabled class="form-control">
+             </div>
+             <!-- /.form-group -->
+           </div>
+
+
+           <div class="col-md-6">
+             <div class="form-group">
+               <label>Branch</label>
+                  <input type="text" name="" disabled value="{{$Settle->area}}" class="form-control">
+             </div>
+             <!-- /.form-group -->
+             <div class="form-group">
+               <label>Varian</label>
+                 <input type="text" name="" value="{{$Settle->produk_name}}" disabled class="form-control">
+             </div>
+             <!-- /.form-group -->
+           </div>
+
+           <div class="col-md-6">
+             <div class="form-group">
+               <label>Distributor/Account/Eo</label>
+                  <input type="text" name="" value="{{$Settle->account_name}}" disabled class="form-control">
+             </div>
+             <!-- /.form-group -->
+             <div class="form-group">
+               <label>Target Name</label>
+                 <input type="text" name="target_name" value="{{$Settle->target_name}}" readonly  class="form-control">
+             </div>
+             <!-- /.form-group -->
+           </div>
+           <input type="hidden" name="budget_detail_id" value="{{$Settle->budget_detail_id}}" readonly class="form-control">
+
+           <div class="col-md-6">
+             <div class="form-group">
+               <label>Proposal Periode</label>
+                 <?php
+                         list($y,$m,$d)=explode('-',$Settle->start_date);
+                         list($y1,$m1,$d1)=explode('-',$Settle->end_date);
+                  ?>
+                  <input type="text" name="" value="{{$d.'-'.$m.'-'.$y}} S/d {{$d1.'-'.$m1.'-'.$y1}}" disabled class="form-control">
+             </div>
+             <!-- /.form-group -->
+             <div class="form-group">
+               <label>Target Value</label>
+                 <input type="text" name="" value="{{$Settle->detail_target_estimasi}} " disabled class="form-control">
+             </div>
+             <!-- /.form-group -->
+           </div>
+           <div class="col-md-6">
+             <div class="form-group">
+               <label>Target Sales</label>
+                  <input type="text" name="detail_target_sales" readonly value="{{$Settle->detail_target_sales}} "  class="form-control">
+             </div>
+             <!-- /.form-group -->
+             <div class="form-group">
+               <label>Cost Rasio</label>
+                 <input type="text" name="" value="{{$Settle->target_estimasi}} " disabled class="form-control">
+             </div>
+             <!-- /.form-group -->
+           </div>
+
+           <div class="col-md-6">
+
+             <div class="form-group">
+               <label>Excekutor</label>
+                 <input type="text" name="" value="{{$Settle->executor_name}} " disabled class="form-control">
+             </div>
+
+             <!-- /.form-group -->
+           </div>
+
+           <input type="hidden" name="budget_detail_id" value="{{$Settle->budget_detail_id}}">
+
+            <hr>
+
+
+
+         </div>
+         <!-- /.row -->
+          ==================================================================================================
+           <div class="row">
+             <div class="col-md-6">
+
+               <div class="form-group">
+                 <label>Actual Achivement</label>
+                   <input type="text" name="actual_ach"  required  class="form-control">
+               </div>
+
+               <!-- /.form-group -->
+             </div>
+
+             <div class="col-md-6">
+
+               <div class="form-group">
+                 <label>Actual Sales</label>
+                   <input type="text" name="actual_sales"  required  class="form-control">
+               </div>
+
+               <!-- /.form-group -->
+             </div>
+
+             <div class="col-md-6">
+
+               <div class="form-group">
+                 <label>Actual/Target Achivement</label>
+                   <input type="text" name="actual_target" required   class="form-control">
+               </div>
+
+               <!-- /.form-group -->
+             </div>
+
+
+             <div class="col-md-6">
+
+               <div class="form-group">
+                 <label>Actual Cost Ratio</label>
+                   <input type="text" name="actual_cost" required   class="form-control">
+               </div>
+
+               <!-- /.form-group -->
+             </div>
+
+             <div class="col-md-12">
+               <div class="form-group">
+
+                    <button type="submit" class="btn btn-primary pull-right">Simpan</button>
+                    
+               </div>
+               <!-- /.form-group -->
+
+               <!-- /.form-group -->
+             </div>
+           </div>
+
+              <?php
+                // echo "<pre>";
+                // print_r($implementation);
+                // echo "</pre>";
+              ?>
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>No Proposal</th>
+                    <th>Tanggal Input Result</th>
+                    <th>Area</th>
+                    <th>Distributor</th>
+                    <th>Brand</th>
+                    <th>Produk</th>
+                    <th>Activity</th>
+                    <th>Actual Achivement </th>
+                    <th>Actual Sales </th>
+                    <th>%Actual/Target Achivement </th>
+                    <th>%Actual Cost Rasio</th>
+                    <th> </th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                @php $no = 1; @endphp
+        @foreach($implementation as $datas)
+            <tr>
+                <td>{{ $no++ }}</td>
+                <td>{{ $datas->eprop_no }}</td>
+                <td></td>
+                <td>{{ $datas->area }}</td>
+                <td>{{ $datas->account_name }}</td>
+                <td>{{ $datas->brand_name }}</td>
+                <td>{{ $datas->produk_name }}</td>
+                <td>{{ $datas->activity_name}}</td>
+                <td>{{ $datas->actual_achievement }}</td>
+                <td>{{ $datas->actual_sales }}</td>
+                <td>{{$datas->actual_achieve_perc}}</td>
+                <td>{{$datas->actual_cost_ratio}}</td>
+                <td></td>
+
+            </tr>
+        @endforeach
+
+
+
+                </tbody>
+              </table>
+
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        </form
+      </div>
+      <!-- /.row -->
+    </section>
+@stop

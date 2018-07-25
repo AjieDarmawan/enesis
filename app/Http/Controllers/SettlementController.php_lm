@@ -1,0 +1,159 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\TrxSettlement;
+use App\TrxSettlement_v;
+use Illuminate\Support\Facades\Auth;
+use Validator; 
+use Session;
+use DB;
+
+class SettlementController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+        //$Settle = TrxSettlement_v::all();
+        //return view('master.settlement.index',['Settle' => $Settle]);
+        $Settle = DB::table('eprop_detail_budget_v')->get();   
+        $Settle1 = TrxSettlement::all();
+        return view('master.settlement.index', ['Settle' => $Settle], ['Settle1' => $Settle1]); 
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+       // $lpayment = DB::table('status')->get();
+       // return view('master.settlement.create', compact('lpayment'));
+
+        //$ltypeproduct = DB::table('type_produk')->get();
+        //$Settle = TrxSettlement_v::find($id); 
+        $ltypeproduct = DB::table('status')->get();
+        return view('master.settlement.create', compact('ltypeproduct')
+        );          
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+
+        $rules = array(
+            'budget_amount'      =>'required|unique:trx_prop_settlement',
+            'actual_amount'      =>'required|unique:trx_prop_settlement',
+            'eprop_id'      =>'required|unique:trx_prop_settlement',
+            'budget_detail_id'      =>'required|unique:trx_prop_settlement'
+        );
+
+        $validator = $this->validate($request, $rules);
+
+        $Settle = new TrxSettlement; 
+        $Settle->budget_amount   = $request->input('budget_amount') ; 
+        $Settle->actual_amount   = $request->input('actual_amount') ; 
+        $Settle->eprop_id   = $request->input('eprop_id') ;
+        $Settle->budget_detail_id   = $request->input('budget_detail_id') ;
+        $Settle->status         = $request->input('status') ;  
+        $Settle->created_by     = Auth::user()->id; 
+        $Settle->updated_by     = Auth::user()->id;
+        $Settle->save();
+
+        $Success = 'Data Settlement berhasil di input!';
+        Session::flash('success', $Success); 
+        
+        $Settle = TrxSettlement::all();
+        return view('master.settlement.index',['Settle' => $Settle]);
+
+
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+          //$Settle = TrxSettlement_v::all();
+        //return view('master.settlement.index',['Settle' => $Settle]);
+       // $Settle = DB::table('eprop_detail_budget_v')->get();   
+       // return view('master.settlement.index', ['Settle' => $Settle]); 
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+      
+         $ltypeproduct = DB::table('status')->get();
+         $Settle = DB::table('eprop_detail_budget_v')->where('budget_detail_id',$id)->first();
+        return view('master.settlement.edit', ['Settle' => $Settle], compact('ltypeproduct'));        
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+         $rules = array(
+            'budget_amount'      =>'required|:trx_prop_settlement',
+            'actual_amount'      =>'required|:trx_prop_settlement',
+            //'eprop_id'      =>'required|:trx_prop_settlement',
+            'budget_detail_id'      =>'required|:trx_prop_settlement'
+        );
+
+        $validator = $this->validate($request, $rules);
+       
+        $Settle = new TrxSettlement; 
+        $Settle->budget_amount   = $request->input('budget_amount') ; 
+        $Settle->actual_amount   = $request->input('actual_amount') ; 
+        $Settle->eprop_id   = $request->input('header_id') ;
+        $Settle->budget_detail_id   = $request->input('budget_detail_id') ;
+        $Settle->status         = $request->input('status') ;  
+        $Settle->created_by     = Auth::user()->id; 
+        $Settle->updated_by     = Auth::user()->id;
+        $Settle->save();
+
+        $Success = 'Data Settlement berhasil di input!';
+        Session::flash('success', $Success); 
+        
+        
+        $Settle = DB::table('eprop_detail_budget_v')->get();   
+        $Settle1 = DB::table('trx_settlement_view')->get();
+        return view('master.settlement.index', ['Settle' => $Settle], ['Settle1' => $Settle1]); 
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}
